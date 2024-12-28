@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+</head>
+<body>
+    <h1>Update Product</h1>
+    <form id="update-product-form">
+        <label for="productId">Product ID:</label>
+        <input type="text" id="productId" name="productId" required><br><br>
+        <label for="newName">New Name:</label>
+        <input type="text" id="newName" name="newName" required><br><br>
+        <label for="newPrice">New Price:</label>
+        <input type="number" id="newPrice" name="newPrice" required><br><br>
+        <label for="newDescription">New Description:</label><br>
+        <textarea id="newDescription" name="newDescription" rows="4" cols="50"></textarea><br><br>
+        <button type="button" onclick="updateProduct()">Update Product</button>
+    </form>
+    
+    <script>
+        function updateProduct() {
+            const productId = document.getElementById('productId').value;
+            const newName = document.getElementById('newName').value;
+            const newPrice = document.getElementById('newPrice').value;
+            const newDescription = document.getElementById('newDescription').value;
+
+            if (productId && newName && newPrice && newDescription) {
+                const updatedProduct = {
+                    name: newName,
+                    price: newPrice,
+                    description: newDescription
+                };
+
+                fetch(`/admin/updateProduct/${productId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedProduct)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    // Optionally, you can reload the page or update the product list
+                })
+                .catch(error => console.error('Error updating product:', error));
+            } else {
+                alert("Please provide all details to update the product.");
+            }
+        }
+    </script>
+</body>
+</html>
